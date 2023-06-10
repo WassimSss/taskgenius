@@ -1,20 +1,42 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello index!{% endblock %}
+{% block title %}Hello index!
+{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+	<div class="d-flex flex-column justify-content-center align-items-center ">
+		<h2>Créer une tache</h2>
+		<form class="w-75">
+			<div class="form-group">
+				<label for="title" class="form-label mt-4">Titre</label>
+				<input type="title" class="form-control" id="title">
+				<small id="title_error" class="form-text text-muted">Message d'erreur...</small>
+			</div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/tojii/Desktop/taskgenius/src/Controller/RegistrationController.php'|file_link(0) }}">src/Controller/RegistrationController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/tojii/Desktop/taskgenius/templates/registration/index.html.twig'|file_link(0) }}">templates/registration/index.html.twig</a></code></li>
-    </ul>
-</div>
+			<div class="form-group">
+				<label for="description" class="form-label mt-4">Description</label>
+				<textarea class="form-control" id="description" rows="3"></textarea>
+			</div>
+
+			<div class="form-group">
+				<label for="priority" class="form-label mt-4">Priorité</label>
+				<select class="form-select" id="priority">
+					<option>Haute</option>
+					<option>Moyenne</option>
+					<option>Basse</option>
+					<option>Optionnel</option>
+				</select>
+			</div>
+
+			<div class="form-group">
+				<label for="date">Date d'échéance</label>
+				<input type="date" class="form-control" id="date" name="date">
+			</div>
+
+			<div class="form-group text-center">
+				<button type="submit" class="btn btn-primary my-4">Créer</button>
+			</div>
+		</form>
+	</div>
 {% endblock %}
