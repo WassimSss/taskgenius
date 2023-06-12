@@ -16,7 +16,8 @@ class IndexController extends AbstractController
     */
     public function index()
     {
-
+        $priorityArray = ["Haute", "Moyenne", "Basse", "Optionnel"];
+        $priority = $priorityArray[mt_rand(0,3)];
         
         return $this->render('index.html.twig', [
             'controller_name' => 'IndexController',

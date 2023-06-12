@@ -1,0 +1,22 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+	Edition de
+	{{ task.title }}
+{% endblock %}
+
+{% block body %}
+	<h1>Editer la tache
+		{{ task.title }}</h1>
+
+	{{ form_start(formView) }}
+
+	{{ form_errors(formView) }}
+
+	{{ form_widget(formView) }}
+
+	<button type="submit" class="btn btn-primary p-2">
+		Modifier la tache</button>
+
+	{{ form_end(formView) }}
+{% endblock %}

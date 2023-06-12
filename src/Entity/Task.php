@@ -23,10 +23,10 @@ class Task
     private ?string $priority = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $creation_date = null;
+    private $creation_date = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $due_date = null;
+    private $due_date = null;
 
     public function getId(): ?int
     {

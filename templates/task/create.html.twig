@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un tache{% endblock %}
+
+{% block body %}
+	<h1>Création d'une tache</h1>
+
+{{ form_start(formView) }}
+
+{{ form_errors(formView) }}
+
+{{ form_widget(formView) }}
+
+<button type="submit" class="btn btn-primary p-2">
+Créer la tache</button>
+
+{{ form_end(formView) }}
+
+
+{% endblock %}
