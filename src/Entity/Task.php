@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\TaskRepository;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\TaskRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 class Task
@@ -14,18 +16,31 @@ class Task
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+
+    #[Assert\NotBlank(message : "Le titre de la tache est obligatoire")]
+    #[Assert\Length(min: 3, max: 255, minMessage: "Le titre de la tache doit avoir au moins 3 caractères", maxMessage: "Le titre de la tache doit avoir au maximum 255 caractères")]
+
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "La description de la tache est obligatoire")]
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "La priorité de la tache est obligatoire")]
+
     private ?string $priority = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: "datetime")]
+    #[Assert\NotBlank(message: "La date de création de la tache est obligatoire")]
     private $creation_date = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: "datetime")]
+    #[Assert\NotBlank(message: "La date de rendu de la tache est obligatoire")]
+    #[Assert\GreaterThanOrEqual(
+         propertyPath: "creation_date",
+         message: "La date de rendu de la tache doit être postérieure ou égale à la date de création de la tache."
+    )]
     private $due_date = null;
 
     public function getId(): ?int
@@ -38,7 +53,7 @@ class Task
         return $this->title;
     }
 
-    public function setTitle(string $title): static
+    public function setTitle(?string $title): static
     {
         $this->title = $title;
 
@@ -50,7 +65,7 @@ class Task
         return $this->description;
     }
 
-    public function setDescription(string $description): static
+    public function setDescription(?string $description): static
     {
         $this->description = $description;
 
@@ -62,31 +77,31 @@ class Task
         return $this->priority;
     }
 
-    public function setPriority(string $priority): static
+    public function setPriority(?string $priority): static
     {
         $this->priority = $priority;
 
         return $this;
     }
 
-    public function getCreationDate(): ?string
+    public function getCreationDate(): ?\DateTime
     {
         return $this->creation_date;
     }
 
-    public function setCreationDate(string $creation_date): static
+    public function setCreationDate(?\DateTime $creation_date): static
     {
         $this->creation_date = $creation_date;
 
         return $this;
     }
 
-    public function getDueDate(): ?string
+    public function getDueDate(): \DateTime
     {
         return $this->due_date;
     }
 
-    public function setDueDate(string $due_date): static
+    public function setDueDate(?\DateTime $due_date): static
     {
         $this->due_date = $due_date;
 

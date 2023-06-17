@@ -21,8 +21,8 @@ class AppFixtures extends Fixture
             $task->setTitle($faker->sentence);
             $task->setDescription($faker->text);
             $task->setPriority($priority);
-            $task->setCreationDate($faker->date);
-            $task->setDueDate($faker->date);
+            $task->setCreationDate($faker->dateTime('Y-m-d'));
+            $task->setDueDate($faker->dateTime('Y-m-d'));
 
             $manager->persist($task);
         }

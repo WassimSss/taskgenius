@@ -19,9 +19,11 @@ class TaskType extends AbstractType
 
             ->add('title', TextType::class, [
                 'label' => 'Titre',
+                'required' => false
             ])
             ->add('description', TextareaType::class, [
                 'label' => 'Description',
+                'required' => false
             ])
             ->add('priority', ChoiceType::class, [
                 'label' => 'Priorité',
@@ -32,14 +34,14 @@ class TaskType extends AbstractType
                     'Basse' => 'Basse',
                     'Optionnel' => 'Optionnel',
 
-                ]
+                ],
+                'required' => false
             ])
             ->add('due_date', DateType::class, [
-                // 'data' => new \DateTime(),
                 'widget' => 'single_text',
-                'input' => 'string',
-                'input_format' => 'd-m-Y'
-            ]);;
+                'input_format' => 'd-m-Y',
+                'required' => false
+            ]);
             
     }
 
