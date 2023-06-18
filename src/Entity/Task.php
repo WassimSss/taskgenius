@@ -16,7 +16,6 @@ class Task
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-
     #[Assert\NotBlank(message : "Le titre de la tache est obligatoire")]
     #[Assert\Length(min: 3, max: 255, minMessage: "Le titre de la tache doit avoir au moins 3 caractères", maxMessage: "Le titre de la tache doit avoir au maximum 255 caractères")]
 

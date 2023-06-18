@@ -4,24 +4,41 @@
 {% endblock %}
 
 {% block body %}
-	<div class="d-flex flex-column justify-content-center align-items-center ">
-		<h2>Se connecter</h2>
-		<form class="w-75">
-			<div class="form-group">
-				<label for="email" class="form-label mt-4">E-mail</label>
-				<input type="email" class="form-control" id="email">
-				<small id="email_error" class="form-text text-muted">Message d'erreur...</small>
-			</div>
+	{# <div class="d-flex flex-column justify-content-center align-items-center ">
 
-            <div class="form-group">
-				<label for="password" class="form-label mt-4">Mot de passe</label>
-				<input type="password" class="form-control" id="password">
-				<small id="password_error" class="form-text text-muted">Message d'erreur...</small>
-			</div>
+			<h2>Se connecter</h2>
+			<form class="w-75">
+				<div class="form-group">
+					<label for="email" class="form-label mt-4">E-mail</label>
+					<input type="email" class="form-control" id="email">
+					<small id="email_error" class="form-text text-muted">Message d'erreur...</small>
+				</div>
+	
+	            <div class="form-group">
+					<label for="password" class="form-label mt-4">Mot de passe</label>
+					<input type="password" class="form-control" id="password">
+					<small id="password_error" class="form-text text-muted">Message d'erreur...</small>
+				</div>
+	
+	            <div class="form-group text-center">
+				    <button type="submit" class="btn btn-primary my-4">Se connecter</button>
+	            </div>
+			</form>
+		</div> #}
 
-            <div class="form-group text-center">
-			    <button type="submit" class="btn btn-primary my-4">Se connecter</button>
-            </div>
-		</form>
-	</div>
+	
+{% if error %}
+{# Il faut voir pk sa traduit pas en twig #}
+    <div class="alert alert-danger">{{ error.messageKey|trans }}</div>
+{% endif %}
+
+	{{ form_start(formView) }}
+
+	{{ form_errors(formView) }}
+
+	{{ form_widget(formView) }}
+
+	<button type="submit" class="btn btn-primary p-2">Se connecter</button>
+
+	{{ form_end(formView) }}
 {% endblock %}
