@@ -6,40 +6,19 @@
 {% block body %}
 	<div class="d-flex flex-column justify-content-center align-items-center ">
 		<h2>S'inscrire</h2>
-		<form class="w-75">
-			<div class="form-group flex-fill">
-				<label for="name" class="form-label mt-4">Nom</label>
-				<input type="text" class="form-control" id="name">
-				<small id="name_error" class="form-text text-muted">Message d'erreur...</small>
-			</div>
+		
+		{{ form_start(formView) }}
 
-            <div class="form-group">
-				<label for="first_name" class="form-label mt-4">Prenom</label>
-				<input type="text" class="form-control" id="first_name">
-				<small id="first_name_error" class="form-text text-muted">Message d'erreur...</small>
-			</div>
+		{{ form_row(formView.fullName)}}
 
-			<div class="form-group">
-				<label for="email" class="form-label mt-4">E-mail</label>
-				<input type="email" class="form-control" id="email">
-				<small id="email_error" class="form-text text-muted">Message d'erreur...</small>
-			</div>
+		{{ form_row(formView.email)}}
 
-            <div class="form-group">
-				<label for="password" class="form-label mt-4">Mot de passe</label>
-				<input type="password" class="form-control" id="password">
-				<small id="password_error" class="form-text text-muted">Message d'erreur...</small>
-			</div>
+		{{ form_row(formView.password.first)}}
 
-            <div class="form-group">
-				<label for="confirm_password" class="form-label mt-4">Confirmation mot de passe</label>
-				<input type="password" class="form-control" id="confirm_password">
-				<small id="emailHelp" class="form-text text-muted">Message d'erreur...</small>
-			</div>
+		{{ form_row(formView.password.second)}}
 
-            <div class="form-group text-center">
-			    <button type="submit" class="btn btn-primary my-4">S'inscrire</button>
-            </div>
-		</form>
+		<button type="submit" class="btn btn-primary p-2">S'inscrire</button>
+
+		{{ form_end(formView) }}
 	</div>
 {% endblock %}

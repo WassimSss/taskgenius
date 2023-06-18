@@ -30,14 +30,12 @@ class TaskController extends AbstractController
     /**
      * @Route("/admin/task/create", name="task_create")
      */
-    public function create(Request $request, EntityManagerInterface $em, ValidatorInterface $validator): Response
+    public function create(Request $request, EntityManagerInterface $em): Response
     {
         $task = new Task;
 
         $today = new DateTime();
         $task->setCreationDate($today);
-
-        $resultat = $validator->validate($task);
 
         $form = $this->createForm(TaskType::class, $task);
 
@@ -56,10 +54,9 @@ class TaskController extends AbstractController
             
         }
 
-        $formView = $form->createView();
 
         return $this->render('task/create.html.twig', [
-            'formView' => $formView,
+            'formView' => $form->createView(),
         ]);
     }
 
