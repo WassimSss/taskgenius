@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class TaskController extends AbstractController
 {
@@ -67,6 +69,17 @@ class TaskController extends AbstractController
     {
         $task = $taskRepository->find($id);
 
+        // if (!$task) {
+        //     throw $this->createNotFoundException("Cette tache n'existe pas");
+        // }
+
+
+
+        // if($user === $task->getOwner()){
+        //     throw $this->createAccessDeniedException("Vous n'avez pas accès a cette page");
+        // }
+        $this->denyAccessUnlessGranted('edit', $task);
+
         $form = $this->createForm(TaskType::class, $task);
 
         
@@ -74,7 +87,6 @@ class TaskController extends AbstractController
         
         if ($form->isSubmitted() && $form->isValid()) {
             $em->flush();
-
             
             return $this->redirectToRoute('task_show', [
                 'id' => $task->getId()
