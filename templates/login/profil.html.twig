@@ -1,0 +1,15 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <h1>Edition du profil</h1>
+
+    {{ form_start(formView) }}
+        {{ form_row(formView.fullName) }}
+        {{ form_row(formView.password) }}
+        {{ form_row(formView.new_password) }}
+        <button type="submit" class="btn btn-primary p-2">Modifier</button>
+    {{ form_end(formView) }}
+
+    
+
+{% endblock %}
