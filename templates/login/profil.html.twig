@@ -3,6 +3,13 @@
 {% block body %}
     <h1>Edition du profil</h1>
 
+{% for rubrique, messages in app.flashes %}
+    <div class="alert alert-{{rubrique}}">
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    </div>
+{% endfor %}
     {{ form_start(formView) }}
         {{ form_row(formView.fullName) }}
         {{ form_row(formView.password) }}
