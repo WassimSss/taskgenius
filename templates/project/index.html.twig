@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}TaskGenius
+{% block title %}Vos projets
 {% endblock %}
 
 {% block body %}
@@ -8,16 +8,17 @@
 	{% if app.user %}
 
 		<div class="container">
-        <div class="row">
-            <h2>Créer </h2>
-        </div>
+
+			<div class="row justify-content-center align-items-center mb-3">
+				<a href="#" class="btn btn-primary btn-lg w-75 d-flex align-items-center justify-content-center"><ion-icon name="add-outline" class="pt-1"></ion-icon> Créer un nouveau projet</a>
+			</div>
 
 			<div class="row text-center my-3">
-				<h2>Vos 3 premiers projets</h2>
+				<h2>Vos projets</h2>
 			</div>
 			<div class="row my-3">
 				{% for project in projects %}
-					<div class="col-md-4">
+					<div class="col-md-4 mb-3">
 						<div class="card h-100 d-flex flex-column m-3">
 							<div class="card-body">
 								<h5 class="card-title">{{ project.title }}</h5>
@@ -27,23 +28,11 @@
 								<small class="text-muted">Crée le
 									{{ project.creationDate | date('Y-m-d H:i:s') }}</small>
 							</div>
-						<a href="#" class="stretched-link text-decoration-none"></a>
+							<a href="#" class="stretched-link text-decoration-none"></a>
 						</div>
 					</div>
 				{% endfor %}
 			</div>
-			{% if otherProjectsNumber > 0 %}
-				<a href="{{ path('project', {id: app.user.getId}) }}" class="text-decoration-none">
-					{% if otherProjectsNumber == 1 %}
-						Voir le projet restant
-					{% else %}
-						Voir les
-						{{ otherProjectsNumber }}
-						projets restants
-					{% endif %}
-				</a>
-			{% endif %}
-
 
 		</div>
 	{% endif %}
