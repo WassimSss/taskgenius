@@ -2,16 +2,22 @@
 
 namespace App\Controller;
 
+use App\Entity\Project;
 use App\Entity\User;
+use App\Form\ProjectType;
+use App\Repository\ProjectRepository;
 use App\Repository\UserRepository;
+use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ProjectController extends AbstractController
 {
     /**
-     * @Route("project/{id}", name="project")
+     * @Route("project/{id}", name="project", priority=-1)
      */
     public function showAll($id, UserRepository $userRepository): Response
     {
@@ -47,6 +53,56 @@ class ProjectController extends AbstractController
 
         return $this->render('project/index.html.twig', [
             // 'projects' => $projects,
+        ]);        
+    }
+
+    /**
+     * @Route("/project/create", name="project_create")
+     */
+    public function create(Request $request, EntityManagerInterface $em): Response
+    {
+        $project = new Project;
+
+        $today = new DateTime();
+        $project->setCreationDate($today);
+
+        $user = $this->getUser();
+        if (!$user) {
+            throw $this->createAccessDeniedException("Veuillez vous connecter");
+        }
+
+        $form = $this->createForm(ProjectType::class, $project);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $project->addUser($user);
+            $em->persist($project);
+            $em->flush();
+
+            return $this->redirectToRoute('project_show', [
+                'id' => $project->getId()
+            ]);
+        }
+        
+        return $this->render('project/create.html.twig', [
+            'formView' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/project/{id}/show", name="project_show")
+     */
+    public function show($id, ProjectRepository $projectRepository): Response
+    {
+        $project = $projectRepository->find($id);
+
+        if (!$project) {
+            throw $this->createNotFoundException("Le projet n'a pas été trouvé");
+
+        }
+        return $this->render('project/show.html.twig', [
+            'project' => $project
         ]);
     }
 }

@@ -1,0 +1,15 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    Créer un nouveau projet
+{% endblock %}
+
+{% block body %}
+    {{ form_start(formView) }}
+    {{ form_errors(formView) }}
+    {{ form_widget(formView) }}
+
+    <button type="submit" class="btn btn-primary p-2 my-3">Créer le projet</button>
+
+    {{ form_end(formView) }}
+{% endblock %}

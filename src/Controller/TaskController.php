@@ -43,8 +43,6 @@ class TaskController extends AbstractController
 
         $form->handleRequest($request);
 
-        
-
         if($form->isSubmitted() && $form->isValid()){
 
             $em->persist($task);
