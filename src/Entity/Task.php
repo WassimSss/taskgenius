@@ -45,6 +45,9 @@ class Task
     #[ORM\ManyToOne(inversedBy: 'tasks')]
     private ?User $owner = null;
 
+    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    private ?Project $project = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -118,6 +121,18 @@ class Task
     public function setOwner(?User $owner): static
     {
         $this->owner = $owner;
+
+        return $this;
+    }
+
+    public function getProject(): ?Project
+    {
+        return $this->project;
+    }
+
+    public function setProject(?Project $project): static
+    {
+        $this->project = $project;
 
         return $this;
     }

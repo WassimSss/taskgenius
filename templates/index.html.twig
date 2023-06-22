@@ -7,11 +7,6 @@
 
 	{% if app.user %}
 
-		<div class="container">
-        <div class="row">
-            <h2>Créer </h2>
-        </div>
-
 			<div class="row text-center my-3">
 				<h2>Vos 3 premiers projets</h2>
 			</div>
@@ -27,7 +22,7 @@
 								<small class="text-muted">Crée le
 									{{ project.creationDate | date('Y-m-d H:i:s') }}</small>
 							</div>
-						<a href="#" class="stretched-link text-decoration-none"></a>
+						<a href="{{ path('project_show', {id: project.getId}) }}" class="stretched-link text-decoration-none"></a>
 						</div>
 					</div>
 				{% endfor %}
@@ -45,6 +40,5 @@
 			{% endif %}
 
 
-		</div>
 	{% endif %}
 {% endblock %}

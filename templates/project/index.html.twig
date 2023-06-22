@@ -7,7 +7,6 @@
 
 	{% if app.user %}
 
-		<div class="container">
 
 			<div class="row justify-content-center align-items-center mb-3">
 				<a href="{{ path('project_create') }}" class="btn btn-primary btn-lg w-75 d-flex align-items-center justify-content-center"><ion-icon name="add-outline" class="pt-1"></ion-icon> Créer un nouveau projet</a>
@@ -28,12 +27,12 @@
 								<small class="text-muted">Crée le
 									{{ project.creationDate | date('Y-m-d H:i:s') }}</small>
 							</div>
-							<a href="#" class="stretched-link text-decoration-none"></a>
+							<a href="{{ path('project_show', {id: project.getId}) }}" class="stretched-link text-decoration-none"></a>
 						</div>
 					</div>
 				{% endfor %}
 			</div>
 
-		</div>
+
 	{% endif %}
 {% endblock %}

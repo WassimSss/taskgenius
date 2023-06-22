@@ -5,5 +5,33 @@
 {% endblock %}
 
 {% block body %}
-    {{project.title }}
+    <div class="row">
+        <div class="col">
+            <h2>{{ project.title }}</h2>
+        </div>
+    </div>
+    {% if project.tasks|length > 0 %}
+        <div class="row">
+        {% for task in project.tasks %}
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <div class="card-body  d-flex flex-column  align-items-center">
+                        <h5 class="card-title text-center">{{ task.title }}</h5>
+                        <p class="card-text text-center">{{ task.description }}</p>
+                        <p class="card-text">Priorité : {{ task.priority }}</p>
+                        <p class="card-text">Date de création : {{ task.creationDate|date('Y-m-d') }}</p>
+                        <p class="card-text">Date d'échéance : {{ task.dueDate|date('Y-m-d') }}</p>
+                        <a href="#" class="btn btn-primary">Terminé</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <p>Aucune tache n'a été créée pour ce projet</p>
+    {% endif %}
+    <div class="row justify-content-center align-items-center mb-3">
+		<a href="{{ path('task_create') }}" class="btn btn-primary d-flex align-items-center justify-content-center"><ion-icon name="add-outline" class="pt-1"></ion-icon> Créer une nouvelle tache</a>
+	</div>
+    
 {% endblock %}
