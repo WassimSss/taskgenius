@@ -16,14 +16,14 @@
 			<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 			<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 			<script>
-			    function confirmAction(event, message) {
-        if (!confirm(message)) {
-            event.preventDefault(); // Annuler l'action par défaut si l'utilisateur clique sur Annuler
-            return false;
-        }
-        // L'action de suppression se poursuit normalement si l'utilisateur clique sur OK
-        return true;
-    }</script>
+				function confirmAction(event, message) {
+					if (!confirm(message)) {
+						event.preventDefault(); 
+						return false;
+						}
+						return true;
+					}
+			</script>
 		{% endblock %}
 	</head>
 	<body>

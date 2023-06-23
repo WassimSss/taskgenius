@@ -36,6 +36,9 @@ class Project
     #[ORM\OneToMany(mappedBy: 'project', targetEntity: Task::class)]
     private Collection $tasks;
 
+    #[ORM\ManyToOne]
+    private ?User $creator = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -136,6 +139,18 @@ class Project
                 $task->setProject(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreator(): ?User
+    {
+        return $this->creator;
+    }
+
+    public function setCreator(?User $creator): static
+    {
+        $this->creator = $creator;
 
         return $this;
     }

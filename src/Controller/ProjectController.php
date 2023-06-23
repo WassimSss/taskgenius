@@ -5,6 +5,7 @@ namespace App\Controller;
 use DateTime;
 use App\Entity\User;
 use App\Entity\Project;
+use App\Form\ProjectInvitationType;
 use App\Form\ProjectType;
 use App\Repository\UserRepository;
 use App\Repository\ProjectRepository;
@@ -71,6 +72,7 @@ class ProjectController extends AbstractController
             throw $this->createAccessDeniedException("Veuillez vous connecter");
         }
 
+
         $form = $this->createForm(ProjectType::class, $project);
 
         $form->handleRequest($request);
@@ -93,16 +95,43 @@ class ProjectController extends AbstractController
     /**
      * @Route("/project/{project_id}/show", name="project_show")
      */
-    public function show($project_id, ProjectRepository $projectRepository): Response
+    public function show($project_id, ProjectRepository $projectRepository, Request $request, UserRepository $userRepository, EntityManagerInterface $em): Response
     {
         $project = $projectRepository->find($project_id);
+
+        $formInvitation = $this->createForm(ProjectInvitationType::class);
 
         if (!$project) {
             throw $this->createNotFoundException("Le projet n'a pas été trouvé");
 
         }
+
+        $contributors = ($project->getUsers()->toArray());
+
+        $formInvitation->handleRequest($request);
+
+        if ($formInvitation->isSubmitted() && $formInvitation->isValid()) {
+            $data = $formInvitation->getData();
+            $user = $userRepository->findOneBy(['email' => $data->getEmail()]);
+            if (!$user) {
+                // ajouter flash erreur
+            };
+            $project->addUser($user);
+
+            $em->persist($project);
+            $em->flush();
+
+            return $this->render('project/show.html.twig', [
+                'project' => $project,
+                'contributors' => $contributors,
+                'formView' => $formInvitation->createView()
+            ]);
+        }
+
         return $this->render('project/show.html.twig', [
-            'project' => $project
+            'project' => $project,
+            'contributors' => $contributors,
+            'formView' => $formInvitation->createView()
         ]);
     }
 }
