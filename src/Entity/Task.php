@@ -48,6 +48,9 @@ class Task
     #[ORM\ManyToOne(inversedBy: 'tasks')]
     private ?Project $project = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $finished = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -133,6 +136,18 @@ class Task
     public function setProject(?Project $project): static
     {
         $this->project = $project;
+
+        return $this;
+    }
+
+    public function isFinished(): ?bool
+    {
+        return $this->finished;
+    }
+
+    public function setFinished(?bool $finished): static
+    {
+        $this->finished = $finished;
 
         return $this;
     }

@@ -17,9 +17,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ProjectController extends AbstractController
 {
     /**
-     * @Route("project/{id}", name="project", priority=-1)
+     * @Route("project/{user_id}", name="project", priority=-1)
      */
-    public function showAll($id, UserRepository $userRepository): Response
+    public function showAll($user_id, UserRepository $userRepository): Response
     {
         /**
          * @var User $user
@@ -32,7 +32,7 @@ class ProjectController extends AbstractController
         }
 
         // On cherche l'utilisateur avec l'id passé dans l'url
-        $user = $userRepository->find($id);
+        $user = $userRepository->find($user_id);
 
         // Si l'utilisateur connecté et l'utilisateur passé dans l'url sont les memes
         if ($loggedUser === $user) {
@@ -91,11 +91,11 @@ class ProjectController extends AbstractController
     }
 
     /**
-     * @Route("/project/{id}/show", name="project_show")
+     * @Route("/project/{project_id}/show", name="project_show")
      */
-    public function show($id, ProjectRepository $projectRepository): Response
+    public function show($project_id, ProjectRepository $projectRepository): Response
     {
-        $project = $projectRepository->find($id);
+        $project = $projectRepository->find($project_id);
 
         if (!$project) {
             throw $this->createNotFoundException("Le projet n'a pas été trouvé");
