@@ -43,10 +43,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinTable(name: "user_project")]
     private Collection $projects;
 
+    #[ORM\OneToMany(mappedBy: 'sender', targetEntity: Invitation::class)]
+    private Collection $invitations;
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
         $this->projects = new ArrayCollection();
+        $this->invitations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -200,6 +204,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeProject(Project $project): static
     {
         $this->projects->removeElement($project);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Invitation>
+     */
+    public function getInvitations(): Collection
+    {
+        return $this->invitations;
+    }
+
+    public function addInvitation(Invitation $invitation): static
+    {
+        if (!$this->invitations->contains($invitation)) {
+            $this->invitations->add($invitation);
+            $invitation->setSender($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInvitation(Invitation $invitation): static
+    {
+        if ($this->invitations->removeElement($invitation)) {
+            // set the owning side to null (unless already changed)
+            if ($invitation->getSender() === $this) {
+                $invitation->setSender(null);
+            }
+        }
 
         return $this;
     }

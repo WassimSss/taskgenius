@@ -39,10 +39,14 @@ class Project
     #[ORM\ManyToOne]
     private ?User $creator = null;
 
+    #[ORM\OneToMany(mappedBy: 'project', targetEntity: Invitation::class)]
+    private Collection $invitations;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->tasks = new ArrayCollection();
+        $this->invitations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -151,6 +155,36 @@ class Project
     public function setCreator(?User $creator): static
     {
         $this->creator = $creator;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Invitation>
+     */
+    public function getInvitations(): Collection
+    {
+        return $this->invitations;
+    }
+
+    public function addInvitation(Invitation $invitation): static
+    {
+        if (!$this->invitations->contains($invitation)) {
+            $this->invitations->add($invitation);
+            $invitation->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInvitation(Invitation $invitation): static
+    {
+        if ($this->invitations->removeElement($invitation)) {
+            // set the owning side to null (unless already changed)
+            if ($invitation->getProject() === $this) {
+                $invitation->setProject(null);
+            }
+        }
 
         return $this;
     }

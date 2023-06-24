@@ -2,11 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Invitation;
 use DateTime;
 use App\Entity\User;
 use App\Entity\Project;
+use App\Form\InvitationType;
 use App\Form\ProjectInvitationType;
 use App\Form\ProjectType;
+use App\Repository\InvitationRepository;
 use App\Repository\UserRepository;
 use App\Repository\ProjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -14,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Validator\Constraints\Date;
 
 class ProjectController extends AbstractController
 {
@@ -54,7 +58,7 @@ class ProjectController extends AbstractController
 
         return $this->render('project/index.html.twig', [
             // 'projects' => $projects,
-        ]);        
+        ]);
     }
 
     /**
@@ -79,14 +83,16 @@ class ProjectController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $project->addUser($user);
+            $project->setCreator($user);
             $em->persist($project);
             $em->flush();
 
             return $this->redirectToRoute('project_show', [
-                'id' => $project->getId()
+                'id' => $project->getId(),
+                'project_id' => $project->getId()
             ]);
         }
-        
+
         return $this->render('project/create.html.twig', [
             'formView' => $form->createView()
         ]);
@@ -95,37 +101,60 @@ class ProjectController extends AbstractController
     /**
      * @Route("/project/{project_id}/show", name="project_show")
      */
-    public function show($project_id, ProjectRepository $projectRepository, Request $request, UserRepository $userRepository, EntityManagerInterface $em): Response
+    public function show($project_id, ProjectRepository $projectRepository, Request $request, UserRepository $userRepository, EntityManagerInterface $em, InvitationRepository $invitationRepository): Response
     {
         $project = $projectRepository->find($project_id);
+        $user = $this->getUser();
 
-        $formInvitation = $this->createForm(ProjectInvitationType::class);
+        $formInvitation = $this->createForm(InvitationType::class);
 
         if (!$project) {
             throw $this->createNotFoundException("Le projet n'a pas été trouvé");
-
         }
 
         $contributors = ($project->getUsers()->toArray());
+        $contributorsEmail = [];
+        foreach ($contributors as $contributor) {
+            $contributorsEmail[] = $contributor->getEmail();
+        }
 
         $formInvitation->handleRequest($request);
 
         if ($formInvitation->isSubmitted() && $formInvitation->isValid()) {
-            $data = $formInvitation->getData();
-            $user = $userRepository->findOneBy(['email' => $data->getEmail()]);
-            if (!$user) {
-                // ajouter flash erreur
-            };
-            $project->addUser($user);
+            if ($user === $project->getCreator()) {
+                $recipient = $request->request->get('invitation')['email'];
+                $recipient = $userRepository->findOneBy(['email' => $recipient]);
 
-            $em->persist($project);
-            $em->flush();
+                // dd($invitationRepository->findOneBy(['recipient' => $recipient]), in_array($recipient, $contributorsEmail) );
+                // On vérifie si l'utilisateur a déjà été invité ou s'il fait déjà partie du projet
+                if ($invitationRepository->findOneBy(['recipient' => $recipient]) || in_array($recipient->getEmail(), $contributorsEmail)) {
+                    throw $this->createAccessDeniedException("L'utilisateur entré fait déjà partie du projet ou a déjà été invité");
+                } else {
+                    $invitation = new Invitation;
+                    $invitation->setSender($user)
+                        ->setRecipient($recipient)
+                        ->setProject($project)
+                        ->setStatus("En attente")
+                        ->setCreationDate(new DateTime());
 
-            return $this->render('project/show.html.twig', [
-                'project' => $project,
-                'contributors' => $contributors,
-                'formView' => $formInvitation->createView()
-            ]);
+                    $em->persist($invitation);
+                    $em->flush();
+
+                    return $this->render('project/show.html.twig', [
+                        'project' => $project,
+                        'contributors' => $contributors,
+                        'formView' => $formInvitation->createView(),
+                        'projectInvitation' => $project->getInvitations()->toArray()
+                    ]);
+                }
+            } else {
+                throw $this->createAccessDeniedException("Vous n'êtes pas le créateur de la tache");
+            }
+        }
+
+
+
+        if ($formInvitation->isSubmitted() && $formInvitation->isValid()) {
         }
 
         return $this->render('project/show.html.twig', [
