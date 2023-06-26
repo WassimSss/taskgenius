@@ -27,7 +27,7 @@
 						<div class="dropdown-menu">
 							<a class="dropdown-item" href="{{ path("profil") }}">Profil</a>
 							<a class="dropdown-item" href="{{ path("project", {user_id: app.user.getId}) }}">Mes projets</a>
-							<a class="dropdown-item {{ has_invitation() ? 'text-danger' }}" href="#">Mes messages</a>
+							<a class="dropdown-item {{ has_invitation() ? 'text-danger' }}" href="{{ path("message") }}">Mes messages</a>
 						</div>
 					</li>
 				{% endif %}

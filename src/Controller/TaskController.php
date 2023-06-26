@@ -51,7 +51,8 @@ class TaskController extends AbstractController
         }
 
         if ($user != null && $project != null) {
-            if (!$user->getId() !== $project->getCreator()) {
+            if ($user !== $project->getCreator()) {
+                dd($user, $project->getCreator());
                 throw $this->createAccessDeniedException("Vous n'êtes pas le créateur du projet");
             }
         }

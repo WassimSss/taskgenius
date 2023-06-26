@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Vos messages{% endblock %}
+
+{% block body %}
+<style>
+        .message-content {
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    .message-time {
+      font-size: 12px;
+    }
+    .message-item {
+      display: flex;
+      justify-content: space-between;
+    }
+    .message-item .message-content {
+      flex-basis: 70%;
+    }
+    .message-item .message-time {
+      flex-basis: 30%;
+      text-align: right;
+    }
+</style>
+
+    {# <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Expéditeur</th>
+        <th scope="col">Destinataire</th>
+        <th scope="col">Messages reçus</th>
+      </tr>
+    </thead> #}
+    <tbody class="w-100">
+    {% set number = 1 %}
+        
+
+        <tr class="border-bottom border-5 border-black">
+            <td class="w-100">
+                <div class="row">
+                <div class="col-12">
+                    {% for userId in discussionsBetweenUsers %}
+                    {{ dump(userId[0], userId[1]) }}
+                    <div class="d-flex justify-content-between align-items-center mb-2 border bg-success text-white p-3 m-3">
+                        Discussion entre {{ userRepository.find(userId[0]).email }} et {{ userRepository.find(userId[1]).email }}
+                        <a href="{{ path('message_show', { user1: userId[0], user2: userId[1] }) }}" class="text-white">Voir les messages</a>
+                    </div>
+                    {# {% for message in discussion %}
+                        <div class="d-flex justify-content-{{ message.sender == app.user ? 'end' : 'start' }} align-items-center my-5 bg-light p-3 rounded" >
+                        <div>
+                            {{ message.content }}
+                        </div>
+                        <div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        </div>
+                    {% endfor %} #}
+                    {% endfor %}
+                </div>
+                </div>
+            </td>
+        </tr>
+      {% set number = number + 1 %}
+      
+
+      
+
+
+
+
+      <tr data-toggle="collapse" data-target="#messages2" aria-expanded="false" aria-controls="messages2">
+        <td>Envoyeur 2</td>
+        <td>Receveur 2</td>
+        <td>1</td>
+      </tr>
+      <tr id="messages2" class="collapse">
+        <td colspan="3">
+          <div class="message-list">
+            <div class="message-item">
+              <div class="message-content text-right">
+                <span class="message-time">09:45</span>
+                <p>Message envoyé par moi</p>
+              </div>
+            </div>
+            <!-- Ajoutez d'autres messages ici -->
+          </div>
+        </td>
+      </tr>
+    {# </tbody>
+  </table> #}
+
+{% endblock %}

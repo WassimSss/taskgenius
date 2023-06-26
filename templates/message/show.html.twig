@@ -1,0 +1,17 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    {% for messages in messagesArray %}
+        {% for message in messages %}
+            <div class="d-flex justify-content-{{ message.sender == app.user ? 'start' : 'end' }} align-items-center my-5 bg-light p-3 rounded" >
+                <div>
+                    {{ message.content }}
+                </div>
+                <div>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        {% endfor %}
+
+    {% endfor %}
+{% endblock %}
