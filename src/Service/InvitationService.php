@@ -8,6 +8,7 @@ use Symfony\Component\Security\Core\Security;
 
 class InvitationService
 {
+    protected $invitation;
     protected $invitationReceived;
     protected $invitationRepository;
     protected $userRepository;
@@ -23,13 +24,30 @@ class InvitationService
     public function isInvitationReceived(): bool
     {
         // Si une invitation pour l'user connecté est trouver
-        if($this->invitationRepository->findOneBy(['recipient' => $this->user]))
+        if($this->invitationRepository->findBy(['recipient' => $this->user,'status' => 'En attente']))
         {
+            $this->invitation = $this->invitationRepository->findBy([
+                'recipient' => $this->user,
+                'status' => 'En attente'
+            ]);
             $this->setInvitationReceived(true);
         } else {
             $this->setInvitationReceived(false);
         }
         return $this->invitationReceived;
+    }
+
+    public function getInvitation()
+    {
+        if($this->invitationRepository->findOneBy(['recipient' => $this->user]))
+        {
+            return $this->invitation = $this->invitationRepository->findBy([
+                'recipient' => $this->user,
+                'status' => 'En attente'
+            ]);
+        } else {
+        return false;
+        }
     }
 
     public function setInvitationReceived(bool $isInvitation)

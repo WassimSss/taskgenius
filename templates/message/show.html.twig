@@ -1,17 +1,43 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-    {% for messages in messagesArray %}
-        {% for message in messages %}
-            <div class="d-flex justify-content-{{ message.sender == app.user ? 'start' : 'end' }} align-items-center my-5 bg-light p-3 rounded" >
-                <div>
-                    {{ message.content }}
-                </div>
-                <div>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-            </div>
-        {% endfor %}
+    <style>
+.sticky-form {
+	position: sticky;
+	top: 20px;
+}</style>
+	{% for messages in messagesArray %}
+		{% for message in messages %}
+			<div class="d-flex flex-column align-items-{{ message.sender == app.user ? 'end' : 'start' }} my-5 ">
+				<div class="bg-light p-3 rounded">
+					{{ message.content }}
+				</div>
+				<small>Le
+					{{ message.creationDate|date('Y-m-d') }}
+					à
+					{{ message.creationDate|date('h:m:s') }}</small>
+				<div>
+					<i class="fas fa-chevron-down"></i>
+				</div>
+			</div>
+		{% endfor %}
 
-    {% endfor %}
+	{% endfor %}
+
+	<div class="col-md-4 mt-5 p-5">
+		<div
+			class="fixed-bottom">
+			<!-- Formulaire d'envoi de message -->
+			<form method="post" action="{{ path('message_send', { 'user1': user1, 'user2': user2}) }}">
+				<div class="form-group">
+                {{ form_row(form.createView.content, {'attr' : {'class': 'form-control'} }) }}
+				{# {{ form_row(formView.send, {'label': 'Envoyer', 'attr': {'class': 'bg-primary text-white'}}) }} #}
+				<button type="submit" class="bg-primary text-white form-control">Envoyer</button>
+				</div>
+			</form>
+ 		</div>
+	</div>
+</div>
+</div>
+
 {% endblock %}

@@ -34,9 +34,11 @@
 								<span class="badge bg-primary">Membre</span>
 							{% endif %}
 						</td>
-						<td>
-							<button class="btn btn-primary" data-user-id="{{ contributor.id }}">Envoyer un message</button>
-						</td>
+						{% if app.user != contributor %}
+							<td>
+								<a class="btn btn-primary" data-user-id="{{ contributor.id }}" href="{{ path('message_show', {user1: app.user.id, user2: contributor.id}) }}">Envoyer un message</a>
+							</td>
+						{% endif %}
 					</tr>
 				{% endfor %}
 			</tbody>

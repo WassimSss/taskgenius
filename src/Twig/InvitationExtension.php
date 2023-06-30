@@ -19,11 +19,17 @@ class InvitationExtension extends AbstractExtension
     {
         return [
             new TwigFunction('has_invitation', [$this, 'hasInvitation']),
+            new TwigFunction('get_invitation', [$this, 'getInvitation']),
         ];
     }
 
     public function hasInvitation()
     {
         return $this->invitationService->isInvitationReceived();
+    }
+
+    public function getInvitation()
+    {
+        return $this->invitationService->getInvitation();
     }
 }
